@@ -19,6 +19,8 @@ help:
 	@echo "$(YELLOW)Comandos disponibles:$(NC)"
 	@echo "  $(GREEN)install$(NC)      - Instalar dependencias"
 	@echo "  $(GREEN)test$(NC)         - Ejecutar tests básicos"
+	@echo "  $(GREEN)test-mocked$(NC)  - Ejecutar solo tests mockeados (sin conexión real)"
+	@echo "  $(GREEN)test-real$(NC)    - Ejecutar solo tests con API real"
 	@echo "  $(GREEN)test-verbose$(NC) - Ejecutar tests con output detallado"
 	@echo "  $(GREEN)test-html$(NC)    - Ejecutar tests y generar reporte HTML"
 	@echo "  $(GREEN)test-coverage$(NC)- Ejecutar tests con cobertura"
@@ -40,6 +42,16 @@ install:
 test:
 	@echo "$(YELLOW)Ejecutando tests...$(NC)"
 	$(PYTHON) -m pytest -v
+
+# Ejecutar solo tests mockeados (no requieren conexión real)
+test-mocked:
+	@echo "$(YELLOW)Ejecutando solo tests mockeados...$(NC)"
+	$(PYTHON) -m pytest -v -m "mocked"
+
+# Ejecutar solo tests con API real (requieren conexión)
+test-real:
+	@echo "$(YELLOW)Ejecutando tests con API real...$(NC)"
+	$(PYTHON) -m pytest -v -m "real_api" --tb=short
 
 # Ejecutar tests con output detallado
 test-verbose:

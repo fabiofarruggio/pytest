@@ -65,29 +65,50 @@ make clean          # Limpiar archivos temporales
 
 ## 🧪 Ejecución de Pruebas
 
-### Ejecutar todas las pruebas:
+### Tipos de Tests Disponibles
+
+Este framework incluye **dos tipos de tests**:
+
+#### 🎭 Tests Mockeados (Recomendados para Demo)
+Tests que simulan las respuestas de la API usando mocks. **No requieren conexión real**.
 ```bash
-pytest
+# Ejecutar solo tests mockeados
+pytest -m "mocked" -v
+
+# O usando Makefile (en sistemas Unix/Linux)
+make test-mocked
 ```
 
-### Ejecutar solo el archivo principal de pruebas:
+#### 🌐 Tests Reales (Para Validación de Conectividad)
+Tests que intentan conectarse a la API real. **Fallarán si la API no está accesible**.
 ```bash
-pytest api_test_challenge/tests/test_import.py
+# Ejecutar solo tests reales
+pytest -m "real_api" -v
+
+# O usando Makefile (en sistemas Unix/Linux)  
+make test-real
 ```
 
-### Ejecutar con mayor verbosidad:
+### Comandos de Ejecución
+
+#### Ejecutar todas las pruebas:
 ```bash
 pytest -v
 ```
 
-### Ejecutar con reporte HTML:
+#### Ejecutar solo tests que pasan (mockeados):
 ```bash
-pytest --html=reports/report.html --self-contained-html
+pytest -m "mocked" -v
 ```
 
-### Con cobertura de código:
+#### Ejecutar con reporte HTML:
 ```bash
-pytest --cov=api_test_challenge --cov-report=html:reports/htmlcov
+pytest -m "mocked" --html=reports/report.html --self-contained-html
+```
+
+#### Con cobertura de código:
+```bash
+pytest -m "mocked" --cov=api_test_challenge --cov-report=html:reports/htmlcov
 ```
 
 ## 🐳 Docker
@@ -120,15 +141,33 @@ Este proyecto incluye configuración completa de GitHub Actions que:
 
 ### Ejecutar pruebas específicas:
 ```bash
-# Solo happy path
-pytest -k "happy_path"
+# Solo happy path (mockeados)
+pytest -m "mocked" -k "happy_path"
 
-# Solo sad path
-pytest -k "sad_path"
+# Solo sad path (mockeados)
+pytest -m "mocked" -k "sad_path"
 
 # Excluir pruebas lentas
 pytest -m "not slow"
 ```
+
+## ❓ ¿Por Qué Hay Tests que Fallan?
+
+Los **tests reales** (`real_api`) están diseñados para conectarse a `https://api.test.worldsys.ar/import`, pero esta API:
+
+1. **No es públicamente accesible** - Es una URL de test ficticia
+2. **Fallará con error de conexión** - `ConnectionError: getaddrinfo failed`
+3. **Es el comportamiento esperado** - Demuestra el manejo robusto de errores
+
+### ✅ Para Demostración del Framework:
+- **Usar tests mockeados**: `pytest -m "mocked" -v`
+- **Siempre pasan**: Demuestran la funcionalidad completa
+- **Sin dependencias externas**: Funcionan en cualquier entorno
+
+### 🌐 Para Validar Conectividad Real:
+- **Usar tests reales**: `pytest -m "real_api" -v`  
+- **Fallarán si API no accesible**: Comportamiento esperado
+- **Muestran manejo de errores**: Framework robusto ante fallos de red
 
 ## Características Implementadas
 

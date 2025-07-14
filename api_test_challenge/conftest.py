@@ -4,7 +4,7 @@ from api_test_challenge.pages.import_api import ImportAPI
 @pytest.fixture
 def import_api():
     """
-    Fixture profesional que proporciona una instancia de ImportAPI
+    Fixture que proporciona una instancia de ImportAPI
     
     Configurada con parámetros por defecto para entorno de testing.
     Permite reutilización y consistencia en todas las pruebas.

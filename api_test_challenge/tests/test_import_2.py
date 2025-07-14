@@ -5,6 +5,7 @@ from api_test_challenge.pages.import_api import ImportAPI
 # Configurar logger para las pruebas
 logger = logging.getLogger(__name__)
 
+@pytest.mark.real_api
 class TestImportAPIAdvanced:
     """
     Suite avanzada de pruebas profesionales para endpoint de importación

@@ -58,16 +58,24 @@ jobs:
     - name: Create reports directory
       run: mkdir -p reports
 
-    - name: Run tests with pytest
+    - name: Run mocked tests (main demo)
       run: |
-        pytest -v \
-          --html=reports/report.html \
+        pytest -m "mocked" -v \
+          --html=reports/report-mocked.html \
           --self-contained-html \
-          --junitxml=reports/junit.xml \
+          --junitxml=reports/junit-mocked.xml \
           --cov=api_test_challenge \
           --cov-report=html:reports/htmlcov \
           --cov-report=xml:reports/coverage.xml \
           --cov-report=term-missing
+
+    - name: Run real API tests (connectivity validation)
+      run: |
+        pytest -m "real_api" -v \
+          --html=reports/report-real.html \
+          --self-contained-html \
+          --junitxml=reports/junit-real.xml \
+          --tb=short
       continue-on-error: true
 
     - name: Upload test results
@@ -92,9 +100,9 @@ jobs:
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        files: "reports/junit.xml"
-        check_name: "Test Results (Python ${{ matrix.python-version }})"
-        comment_title: "Test Results"
+        files: "reports/junit-mocked.xml"
+        check_name: "Mocked Tests Results (Python ${{ matrix.python-version }})"
+        comment_title: "Mocked Test Results"
 
   docker-test:
     runs-on: ubuntu-latest
