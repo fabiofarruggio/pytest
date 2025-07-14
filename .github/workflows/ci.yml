@@ -2,9 +2,9 @@ name: API Automation Tests CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
   schedule:
     # Ejecutar tests diariamente a las 6:00 AM UTC
     - cron: '0 6 * * *'
