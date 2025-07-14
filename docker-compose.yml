@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  pytest-tests:
+    build: .
+    container_name: api-automation-tests
+    volumes:
+      # Montar directorio de reportes para acceder desde host
+      - ./reports:/app/reports
+      # Montar código para desarrollo (opcional)
+      - ./api_test_challenge:/app/api_test_challenge:ro
+    environment:
+      - PYTHONPATH=/app
+    command: >
+      pytest -v 
+      --html=reports/report.html 
+      --self-contained-html 
+      --junitxml=reports/junit.xml
+      --cov=api_test_challenge
+      --cov-report=html:reports/htmlcov
+      --cov-report=xml:reports/coverage.xml
+    networks:
+      - test-network
+
+  # Servicio para desarrollo interactivo
+  pytest-dev:
+    build: .
+    container_name: api-automation-dev
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+    command: bash
+    stdin_open: true
+    tty: true
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  reports:
+    driver: local 
