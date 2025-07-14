@@ -1,5 +1,11 @@
 name: API Automation Tests CI
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  actions: read
+
 on:
   push:
     branches: [ main, master, develop ]
@@ -14,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11]
+        python-version: ["3.9", "3.10", "3.11"]
 
     steps:
     - name: Checkout code
