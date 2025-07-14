@@ -25,11 +25,11 @@ COPY . .
 # Cambiar propiedad de archivos al usuario no-root
 RUN chown -R testuser:testuser /app
 
+# Crear directorio para reportes con permisos correctos
+RUN mkdir -p /app/reports && chown -R testuser:testuser /app/reports
+
 # Cambiar a usuario no-root
 USER testuser
 
-# Crear directorio para reportes en /tmp (siempre escribible)
-RUN mkdir -p /tmp/reports
-
 # Comando por defecto para ejecutar tests
-CMD ["pytest", "-v", "--html=/tmp/reports/report.html", "--self-contained-html", "--junitxml=/tmp/reports/junit.xml"] 
+CMD ["pytest", "-v", "--html=reports/report.html", "--self-contained-html", "--junitxml=reports/junit.xml"] 

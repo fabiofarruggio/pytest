@@ -112,6 +112,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Use Docker in rootless mode
+      uses: ScribeMD/rootless-docker@0.2.2
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -123,7 +126,7 @@ jobs:
       run: |
         mkdir -p reports
         docker run --rm \
-          -v $(pwd)/reports:/tmp/reports \
+          -v $(pwd)/reports:/app/reports \
           api-automation-tests
 
     - name: Upload Docker test results
