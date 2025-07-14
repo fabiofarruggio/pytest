@@ -123,7 +123,7 @@ jobs:
       run: |
         mkdir -p reports
         docker run --rm \
-          -v $(pwd)/reports:/app/reports \
+          -v $(pwd)/reports:/tmp/reports \
           api-automation-tests
 
     - name: Upload Docker test results
