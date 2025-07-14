@@ -1,6 +1,6 @@
 # 🚀 Framework de Automatización de API
 
-[![CI](https://github.com/tu-usuario/tu-repo/workflows/API%20Automation%20Tests%20CI/badge.svg)](https://github.com/tu-usuario/tu-repo/actions)
+[![CI](https://github.com/fabiofarruggio/pytest/workflows/API%20Automation%20Tests%20CI/badge.svg)](https://github.com/fabiofarruggio/pytest/actions)
 [![Docker](https://img.shields.io/badge/docker-ready-blue)](https://hub.docker.com/)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![pytest](https://img.shields.io/badge/testing-pytest-green)](https://docs.pytest.org/)
