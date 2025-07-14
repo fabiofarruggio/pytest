@@ -2,4 +2,9 @@ pytest==7.4.3
 requests==2.31.0
 pytest-html==4.1.1
 pytest-xdist==3.3.1
-pytest-cov==4.1.0 
+pytest-cov==4.1.0
+
+# Dependencias para base de datos
+SQLAlchemy==2.0.21
+pyodbc==4.0.39
+pymssql==2.2.8 

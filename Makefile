@@ -24,6 +24,10 @@ help:
 	@echo "  $(GREEN)test-verbose$(NC) - Ejecutar tests con output detallado"
 	@echo "  $(GREEN)test-html$(NC)    - Ejecutar tests y generar reporte HTML"
 	@echo "  $(GREEN)test-coverage$(NC)- Ejecutar tests con cobertura"
+	@echo "  $(GREEN)test-database$(NC) - Ejecutar tests de base de datos (requiere DB_*)"
+	@echo "  $(GREEN)test-database-mocked$(NC) - Ejecutar tests mockeados de DB"
+	@echo "  $(GREEN)test-full$(NC)    - Ejecutar suite completa (API + DB reales)"
+	@echo "  $(GREEN)test-mocked-all$(NC) - Ejecutar todos los tests mockeados"
 	@echo "  $(GREEN)lint$(NC)         - Ejecutar linting"
 	@echo "  $(GREEN)format$(NC)       - Formatear código"
 	@echo "  $(GREEN)clean$(NC)        - Limpiar archivos temporales"
@@ -57,6 +61,29 @@ test-real:
 test-verbose:
 	@echo "$(YELLOW)Ejecutando tests con output detallado...$(NC)"
 	$(PYTHON) -m pytest -v -s --tb=short
+
+# Ejecutar solo tests de base de datos (requieren configuración DB_*)
+test-database:
+	@echo "$(YELLOW)Ejecutando tests de base de datos...$(NC)"
+	@echo "$(BLUE)Nota: Requiere variables de entorno DB_SERVER, DB_NAME, DB_USER, DB_PASSWORD$(NC)"
+	$(PYTHON) -m pytest -v -m "database" --tb=short
+
+# Ejecutar solo tests mockeados de base de datos
+test-database-mocked:
+	@echo "$(YELLOW)Ejecutando tests mockeados de base de datos...$(NC)"
+	$(PYTHON) -m pytest -v -m "mocked_database"
+
+# Ejecutar todos los tests (API + DB) con configuración real
+test-full:
+	@echo "$(YELLOW)Ejecutando suite completa de tests...$(NC)"
+	@echo "$(BLUE)Incluye: API real + Base de datos real$(NC)"
+	$(PYTHON) -m pytest -v -m "real_api or database" --tb=short
+
+# Ejecutar todos los tests mockeados (para demos/CI)
+test-mocked-all:
+	@echo "$(YELLOW)Ejecutando todos los tests mockeados...$(NC)"
+	@echo "$(BLUE)Incluye: API mockeada + Base de datos mockeada$(NC)"
+	$(PYTHON) -m pytest -v -m "mocked or mocked_database"
 
 # Ejecutar tests y generar reporte HTML
 test-html:

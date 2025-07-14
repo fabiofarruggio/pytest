@@ -44,4 +44,45 @@ def setup_logging():
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-    return logging.getLogger(__name__) 
+    return logging.getLogger(__name__)
+
+
+# Fixtures para base de datos
+@pytest.fixture(scope="session")
+def db_config():
+    """
+    Fixture que proporciona la configuración de base de datos
+    
+    Returns:
+        DatabaseConfig: Instancia de configuración de DB
+    """
+    try:
+        from api_test_challenge.database_config import db_config
+        return db_config
+    except ImportError:
+        return None
+
+
+@pytest.fixture(scope="session")
+def database_available(db_config):
+    """
+    Fixture que verifica si la base de datos está disponible
+    
+    Returns:
+        bool: True si la DB está configurada y disponible
+    """
+    if db_config is None:
+        return False
+    return db_config.is_available
+
+
+@pytest.fixture
+def import_api_with_db(import_api, db_config):
+    """
+    Fixture que proporciona ImportAPI con configuración de base de datos
+    
+    Returns:
+        ImportAPI: Instancia con DB configurada
+    """
+    import_api.db_config = db_config
+    return import_api 

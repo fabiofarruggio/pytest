@@ -1,7 +1,7 @@
 import requests
 import json
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List, Tuple
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -125,4 +125,94 @@ class ImportAPI:
             return response.json()
         except (json.JSONDecodeError, ValueError):
             logger.warning("La respuesta no contiene JSON válido")
+            return None
+    
+    # Métodos de base de datos
+    def __init_db__(self):
+        """Inicializar configuración de base de datos si no está ya configurada"""
+        if not hasattr(self, 'db_config') or self.db_config is None:
+            try:
+                from api_test_challenge.database_config import db_config
+                self.db_config = db_config
+            except ImportError:
+                self.db_config = None
+                logger.warning("⚠️  Dependencias de base de datos no disponibles")
+    
+    def validate_person_in_database(self, person_id: int) -> bool:
+        """
+        Valida que el person_id esté presente en la base de datos
+        
+        Args:
+            person_id (int): ID de la persona a validar
+            
+        Returns:
+            bool: True si se encuentra en la DB, False si no
+        """
+        self.__init_db__()
+        
+        if not hasattr(self, 'db_config') or not self.db_config:
+            logger.warning("⚠️  No hay configuración de base de datos disponible")
+            return False
+        
+        if not self.db_config.is_configured:
+            logger.warning("⚠️  Base de datos no configurada")
+            return False
+        
+        try:
+            return self.db_config.validate_person_exists(person_id)
+        except Exception as e:
+            logger.error(f"❌ Error validando person_id {person_id} en DB: {str(e)}")
+            return False
+    
+    def get_person_from_database(self, person_id: int) -> Optional[Dict[str, Any]]:
+        """
+        Obtiene los datos de una persona desde la base de datos
+        
+        Args:
+            person_id (int): ID de la persona
+            
+        Returns:
+            Optional[Dict[str, Any]]: Datos de la persona o None si no existe
+        """
+        self.__init_db__()
+        
+        if not hasattr(self, 'db_config') or not self.db_config:
+            logger.warning("⚠️  No hay configuración de base de datos disponible")
+            return None
+        
+        if not self.db_config.is_configured:
+            logger.warning("⚠️  Base de datos no configurada")
+            return None
+        
+        try:
+            return self.db_config.get_person_data(person_id)
+        except Exception as e:
+            logger.error(f"❌ Error obteniendo datos de person_id {person_id}: {str(e)}")
+            return None
+    
+    def execute_db_query(self, query: str, params: Optional[Dict[str, Any]] = None) -> Optional[List[Tuple]]:
+        """
+        Ejecuta una consulta SQL personalizada
+        
+        Args:
+            query (str): Consulta SQL a ejecutar
+            params (Optional[Dict[str, Any]]): Parámetros para la consulta
+            
+        Returns:
+            Optional[List[Tuple]]: Resultados de la consulta o None si hay error
+        """
+        self.__init_db__()
+        
+        if not hasattr(self, 'db_config') or not self.db_config:
+            logger.warning("⚠️  No hay configuración de base de datos disponible")
+            return None
+        
+        if not self.db_config.is_available:
+            logger.warning("⚠️  Base de datos no disponible")
+            return None
+        
+        try:
+            return self.db_config.execute_query(query, params)
+        except Exception as e:
+            logger.error(f"❌ Error ejecutando query: {str(e)}")
             return None 
