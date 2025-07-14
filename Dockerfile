@@ -22,11 +22,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar código del proyecto
 COPY . .
 
-# Crear directorio para reportes con permisos correctos
-RUN mkdir -p /app/reports
-
-# Cambiar propiedad de archivos al usuario no-root
-RUN chown -R testuser:testuser /app
+# Cambiar propiedad de archivos al usuario no-root y crear directorio de reportes
+RUN chown -R testuser:testuser /app && \
+    mkdir -p /app/reports && \
+    chown -R testuser:testuser /app/reports
 
 # Cambiar a usuario no-root
 USER testuser
